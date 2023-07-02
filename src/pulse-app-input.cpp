@@ -271,7 +271,7 @@ static void pulse_source_info(pa_context *c, const pa_source_info *i, int eol,
 		return;
 	}
 
-	pa_proplist *proplist = i->proplist;
+//	pa_proplist *proplist = i->proplist;
 
 	blog(LOG_INFO,
 	     "Audio format: %s, %" PRIu32 " Hz"
@@ -453,7 +453,7 @@ static obs_properties_t *pulse_app_input_properties(void *unused)
  */
 static void pulse_app_input_defaults(obs_data_t *settings)
 {
-	obs_data_set_default_string(settings, "client", NULL);
+	obs_data_set_default_string(settings, "client", nullptr);
 }
 
 /**
@@ -468,6 +468,7 @@ static const char *pulse_app_input_getname(void *unused)
 static void get_sink_input_cb(pa_context *c, const pa_sink_input_info *i,
 			      int eol, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 
 	if (eol || i->index == PA_INVALID_INDEX ||
@@ -499,6 +500,7 @@ static bool get_sink_input(struct pulse_data *data)
 
 static void move_sink_input_cb(pa_context *c, int success, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 	data->move_success = success;
 	pulse_signal(0);
@@ -506,6 +508,8 @@ static void move_sink_input_cb(pa_context *c, int success, void *userdata)
 
 static void unload_module_cb(pa_context *c, int success, void *userdata)
 {
+	UNUSED_PARAMETER(c);
+	UNUSED_PARAMETER(userdata);
 	blog(LOG_INFO, "module unload success: %d", success);
 	pulse_signal(0);
 }
@@ -565,6 +569,7 @@ static void pulse_app_input_destroy(void *vptr)
 static void get_client_idx_cb(pa_context *c, const pa_client_info *i, int eol,
 			      void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 
 	if (eol || i->index == PA_INVALID_INDEX ||
@@ -578,6 +583,7 @@ static void get_client_idx_cb(pa_context *c, const pa_client_info *i, int eol,
 static void get_sink_name_by_index_cb(pa_context *c, const pa_sink_info *i,
 				      int eol, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 
 	if (eol || i->index == PA_INVALID_INDEX) {
@@ -589,6 +595,7 @@ static void get_sink_name_by_index_cb(pa_context *c, const pa_sink_info *i,
 
 static void load_new_module_cb(pa_context *c, uint32_t idx, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 	blog(LOG_INFO, "new module idx %d", idx);
 	if (idx != PA_INVALID_INDEX) {
@@ -603,6 +610,7 @@ static void load_new_module_cb(pa_context *c, uint32_t idx, void *userdata)
 static void get_sink_id_by_owner_cb(pa_context *c, const pa_sink_info *i,
 				    int eol, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	PULSE_DATA(userdata);
 	if (eol || i->index == PA_INVALID_INDEX) {
 		pulse_signal(0);
@@ -759,6 +767,7 @@ static void pulse_app_input_update(void *vptr, obs_data_t *settings)
 void update_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i,
 			       int eol, void *userdata)
 {
+	UNUSED_PARAMETER(c);
 	blog(LOG_INFO, "in callback");
 
 	PULSE_DATA(userdata);
@@ -839,6 +848,7 @@ static void *pulse_create(obs_data_t *settings, obs_source_t *source)
 
 	blog(LOG_INFO, "%s", "initting from create");
 	pulse_init();
+	blog(LOG_INFO, "Finished pulse_init");
 	pulse_subscribe_sink_input_events(sink_event_cb, data);
 	blog(LOG_INFO, "%s",
 	     "finished initting from create now calling update");

@@ -1,10 +1,12 @@
 *~
 .DS_Store
 /build/
+/build_*/
 /build32/
 /build64/
 /release/
 /installer/Output/
+/cmake-build-debug/
 
 .vscode
 .idea
